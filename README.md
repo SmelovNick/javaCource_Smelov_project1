@@ -1,1 +1,1 @@
-# javaCource_Smelov_project1
+Выбрано задание 2 - финансовый помощник
