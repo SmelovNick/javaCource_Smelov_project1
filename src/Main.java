@@ -80,7 +80,6 @@ public class Main {
         }
     }
 
-    //TODO протестировать
     public static void deleteTransaction(){
         int transactionNumber = getLineForDeletion();
         if (transactionNumber >0){
