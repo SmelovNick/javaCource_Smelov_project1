@@ -38,7 +38,7 @@ public class Main {
                 "2. Удалить трату/пополнение\n" +
                 "3. Узнать текущий счёт\n" +
                 "4. Вывести все траты/пополнения\n" +
-                "5. Вывести траты по определенной категории\n" +
+                "5. Вывести траты/пополнения по определенной категории\n" +
                 "0. Выход");
     }
 
@@ -73,19 +73,18 @@ public class Main {
 
     public static boolean checkAmount(String[][]transaction){
         int amount = Integer.parseInt(transaction[0][1]);
-        if (accountBalance+amount<0) {
+        if((accountBalance>=0 && (amount + accountBalance >=0)) || (accountBalance<0 && amount >0)) return true;
+        else {
             System.out.println("Операция не может быть выполнена - недостаточно средств на счёте");
             return false;
         }
-        else return true;
     }
 
-    //TODO доработать метод:
-    // 1. возможно, нужно изменять баланс на сумму удаляемой транзакции
-    // 2. возможно, нужно убрать обнуление суммы
+    //TODO протестировать
     public static void deleteTransaction(){
         int transactionNumber = getLineForDeletion();
         if (transactionNumber >0){
+            accountBalance -=Integer.parseInt(transactions[transactionNumber-1][1]);
             transactions[transactionNumber-1][0] = null;
             transactions[transactionNumber-1][1] = null;
         }
@@ -98,17 +97,16 @@ public class Main {
 
     public static void showAllTransactions(){
         for (int i = 0; i < rows; i++) {
-            if(transactions[i][0] != null) System.out.println(i + 1 + " " + transactions[i][0] + " " + transactions[i][1]);
+            if(transactions[i][0] != null) System.out.println(i + 1 + ". " + transactions[i][0] + " " + transactions[i][1]);
         }
     }
 
-    //TODO Возможно, нужно будет нумеровать строки согласно их номеру в массиве
     public static void showTransactionByCategory() {
         String category = getCategory();
         if(categoryExist(category)){
             int increment = 1;
             for(String [] transaction : transactions){
-                if (transaction[0].equals(category)) System.out.println(increment++ + ". " + " " + transaction[0] + " " + transaction[1]);;
+                if (transaction[0] != null && transaction[0].equals(category)) System.out.println(increment++ + ". " + " " + transaction[0] + " " + transaction[1]);;
             }
         }
         else System.out.println("Данная категория трат/пополнений отсутствует");
@@ -117,7 +115,7 @@ public class Main {
     public static boolean categoryExist(String category) {
         boolean flag = false;
         for(String [] transaction : transactions){
-            if (transaction[0].equals(category)) {flag = true; break;}
+            if (transaction[0] != null && transaction[0].equals(category)) {flag = true; break;}
         }
         return flag;
     }
